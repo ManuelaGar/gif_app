@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gifimage/flutter_gifimage.dart';
+
 import 'package:gif_app/components/app_button.dart';
+import 'package:gif_app/components/confirm_button.dart';
 
 void main() {
   runApp(MyApp());
@@ -35,7 +37,10 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     super.initState();
   }
 
-  playGif() {
+  playGif(String gifToPlay) {
+    setState(() {
+      gif = gifToPlay;
+    });
     controller.value = 0;
     controller.animateTo(23,
         duration: Duration(milliseconds: (140 * 25).toInt()));
@@ -62,14 +67,11 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                         title: 'Login',
                         textColor: kDarkBlue,
                         onPress: () {
-                          setState(() {
-                            gif = 'login';
-                          });
-                          playGif();
+                          playGif('login');
                           print('Login pressed');
                         },
                         onDoublePress: () {
-                          print('Login 2x pressed');
+                          print('Go to login');
                           //Navigator.pushNamed(context, LoginScreen.id);
                         },
                       ),
@@ -81,14 +83,10 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                         title: 'Nuevo Usuario',
                         textColor: Colors.white,
                         onPress: () {
-                          setState(() {
-                            gif = 'registro';
-                          });
-                          playGif();
-                          print('Registration pressed');
+                          playGif('registro');
                         },
                         onDoublePress: () {
-                          print('Registration 2x pressed');
+                          print('Go to registration');
                           //Navigator.pushNamed(context, RegistrationScreen.id);
                         },
                       ),
@@ -106,42 +104,22 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                       child: GifImage(
                         controller: controller,
                         image: AssetImage('images/$gif.gif'),
-                        fit: BoxFit.fill,
                       ),
                       elevation: 7,
                     ),
-                    Container(
-                      alignment: Alignment.center,
-                      height: 58.0,
-                      width: 58.0,
-                      decoration: BoxDecoration(
-                        color: kDarkBlue,
-                        borderRadius: BorderRadius.circular(40.0),
-                        boxShadow: [
-                          BoxShadow(
-                            color: kDarkBlue.withOpacity(0.3),
-                            spreadRadius: 2,
-                            blurRadius: 5,
-                            offset: Offset(3, 3),
-                          ),
-                        ],
-                      ),
-                      child: IconButton(
-                          icon: Icon(
-                            Icons.check,
-                            color: Colors.white,
-                            size: 28,
-                          ),
-                          onPressed: () {
-                            if (gif == 'login') {
-                              print('Go to login');
-                              //Navigator.pushNamed(context, LoginScreen.id);
-                            } else if (gif == 'registro') {
-                              print('Go to registration');
-                              //Navigator.pushNamed(context, RegistrationScreen.id);
-                            }
-                          }),
-                    )
+                    ConfirmButton(
+                      color: kDarkBlue,
+                      gif: gif,
+                      onPressed: () {
+                        if (gif == 'login') {
+                          print('Go to login');
+                          //Navigator.pushNamed(context, LoginScreen.id);
+                        } else if (gif == 'registro') {
+                          print('Go to registration');
+                          //Navigator.pushNamed(context, RegistrationScreen.id);
+                        }
+                      },
+                    ),
                   ],
                 ),
               ),
